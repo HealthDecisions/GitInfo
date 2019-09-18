@@ -2,3 +2,4 @@
 out
 /GitInfo.cache
 *.suo
+/src/GitInfo.sln.DotSettings.user
