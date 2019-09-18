@@ -48,6 +48,9 @@ Namespace Global
             ''' <summary>Commits on top of base version: $GitCommits$</summary>
             Public Const Commits As String = "$GitCommits$"
 
+            ''' <summary>Commits from start: $GitCommitsFromStart$</summary>
+            Public Const CommitsFromStart As String = "$GitCommitsFromStart$
+
             ''' <summary>Tag: $GitTag$</summary>
             Public Const Tag As String = "$GitTag$"
 

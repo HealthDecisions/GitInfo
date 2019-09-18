@@ -7,6 +7,7 @@ GitBaseVersionMajor=$GitBaseVersionMajor$;
 GitBaseVersionMinor=$GitBaseVersionMinor$;
 GitBaseVersionPatch=$GitBaseVersionPatch$;
 GitCommits=$GitCommits$;
+GitCommitsFromStart=$GitCommitsFromStart$;
 GitTag=$GitTag$;
 GitBaseTag=$GitBaseTag$;
 GitSemVerMajor=$GitSemVerMajor$;

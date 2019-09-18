@@ -112,6 +112,7 @@
   GitBaseVersionMinor:  $(GitBaseVersionMinor)
   GitBaseVersionPatch:  $(GitBaseVersionPatch)
   GitCommits:           $(GitCommits)
+  GitCommitsFromStart:  $(GitCommitsFromStart)
   GitTag:               $(GitTag)
   GitBaseTag:           $(GitBaseTag)
   GitSemVerMajor:       $(GitSemVerMajor)
@@ -133,6 +134,7 @@
 			_GitReadCache;
 			_GitBranch;
 			_GitCommit;
+			_GitCommitsFromStart;
 			_GitPopulateInfo;
 		</GitInfoDependsOn>
 	</PropertyGroup>
@@ -322,6 +324,7 @@
 			<GitBaseVersionMinor Condition="'$(GitBaseVersionMinor)' == ''">%(GitInfo.GitBaseVersionMinor)</GitBaseVersionMinor>
 			<GitBaseVersionPatch Condition="'$(GitBaseVersionPatch)' == ''">%(GitInfo.GitBaseVersionPatch)</GitBaseVersionPatch>
 			<GitCommits Condition="'$(GitCommits)' == '' Or '$(GitCommits)' == '0'">%(GitInfo.GitCommits)</GitCommits>
+			<GitCommitsFromStart Condition="'$(GitCommitsFromStart)' == '' Or '$(GitCommitsFromStart)' == '0'">%(GitInfo.GitCommitsFromStart)</GitCommitsFromStart>
 			<GitTag Condition="'$(GitTag)' == ''">%(GitInfo.GitTag)</GitTag>
 			<GitBaseTag Condition="'$(GitBaseTag)' == ''">%(GitInfo.GitBaseTag)</GitBaseTag>
 			<GitSemVerMajor Condition="'$(GitSemVerMajor)' == ''">%(GitInfo.GitSemVerMajor)</GitSemVerMajor>
@@ -403,6 +406,30 @@
 
 	</Target>
 
+	<Target Name="_GitCommitsFromStart" Returns="$(GitCommitsFromStart)"
+	        DependsOnTargets="_GitRoot"
+	        Inputs="@(_GitInput)"
+	        Outputs="$(_GitInfoFile)"
+	        Condition="'$(GitRoot)' != '' And '$(GitCommitsFromStart)' == ''">
+
+		<Exec Command='$(GitExe) rev-list --count HEAD'
+		      EchoOff='true'
+		      StandardErrorImportance="low"
+		      StandardOutputImportance="low"
+		      ConsoleToMSBuild="true"
+		      WorkingDirectory="$(GitRoot)"
+		      ContinueOnError="true">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommitsFromStart"/>
+			<Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
+		</Exec>
+
+		<PropertyGroup Condition="'$(MSBuildLastExitCode)' != '0'">
+			<GitCommitsFromStart>0</GitCommitsFromStart>
+		</PropertyGroup>
+
+	</Target>
+
+
 	<Target Name="_GitPopulateInfo">
 		<ItemGroup>
 			<GitInfo Include="GitInfo">
@@ -410,6 +437,7 @@
 				<GitBranch>$(GitBranch)</GitBranch>
 				<GitCommit>$(GitCommit)</GitCommit>
 				<GitSha>$(GitSha)</GitSha>
+				<GitCommitsFromStart>$(GitCommitsFromStart)</GitCommitsFromStart>
 			</GitInfo>
 		</ItemGroup>
 	</Target>
@@ -783,6 +811,7 @@
 
 			<_GitInfoContent>$(_GitInfoContent.Replace('$GitBranch$', '$(GitBranch)'))</_GitInfoContent>
 			<_GitInfoContent>$(_GitInfoContent.Replace('$GitCommits$', '$(GitCommits)'))</_GitInfoContent>
+			<_GitInfoContent>$(_GitInfoContent.Replace('$GitCommitsFromStart$', '$(GitCommitsFromStart)'))</_GitInfoContent>
 			<_GitInfoContent>$(_GitInfoContent.Replace('$GitCommit$', '$(GitCommit)'))</_GitInfoContent>
 			<_GitInfoContent>$(_GitInfoContent.Replace('$GitSha$', '$(GitSha)'))</_GitInfoContent>
 			<_GitInfoContent>$(_GitInfoContent.Replace('$GitBaseVersion$', '$(GitBaseVersion)'))</_GitInfoContent>
@@ -862,6 +891,7 @@
 			
 			<_ThisAssemblyContent>$(_ThisAssemblyContent.Replace('$GitBranch$', '$(GitBranch)'))</_ThisAssemblyContent>
 			<_ThisAssemblyContent>$(_ThisAssemblyContent.Replace('$GitCommits$', '$(GitCommits)'))</_ThisAssemblyContent>
+			<_ThisAssemblyContent>$(_ThisAssemblyContent.Replace('$GitCommitsFromStart$', '$(GitCommitsFromStart)'))</_ThisAssemblyContent>
 			<_ThisAssemblyContent>$(_ThisAssemblyContent.Replace('$GitCommit$', '$(GitCommit)'))</_ThisAssemblyContent>
 			<_ThisAssemblyContent>$(_ThisAssemblyContent.Replace('$GitSha$', '$(GitSha)'))</_ThisAssemblyContent>
 			<_ThisAssemblyContent>$(_ThisAssemblyContent.Replace('$GitBaseVersion$', '$(GitBaseVersion)'))</_ThisAssemblyContent>

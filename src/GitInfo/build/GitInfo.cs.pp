@@ -50,6 +50,9 @@ namespace _RootNamespace_
       /// <summary>Commits on top of base version: $GitCommits$</summary>
       public const string Commits = "$GitCommits$";
 
+	  /// <summary>Commits from start: $GitCommitsFromStart$</summary>
+      public const string CommitsFromStart = "$GitCommitsFromStart$";
+
       /// <summary>Tag: $GitTag$</summary>
       public const string Tag = "$GitTag$";
 
